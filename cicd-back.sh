@@ -13,4 +13,4 @@ echo "终止 并 移除 之前的容器"
 docker stop cicd-back-container
 docker rm cicd-back-container
 echo "创建 并 启动 新容器"
-docker container run -port 5000:5000 --name cicd-back-container -d cicd-back:1.0
+docker run -port 5000:5000 --name cicd-back-container -d cicd-back:1.0
