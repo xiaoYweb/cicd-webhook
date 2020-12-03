@@ -13,14 +13,15 @@ const server = http.createServer((req, res) => {
   if (method === 'POST' && url === '/webhook') {
     let body; // 请求体
     const buffer = [];
-    
+
     req.on('data', (fragment) => {
       buffer.push(fragment)
     })
 
     req.on('end', (fragment) => {
       body = buffer.concat(fragment).toString()
-      console.log('isSame key', sign(body) !== signature)
+      console.log('body', body, signature)
+      console.log('isSame key', sign(body) === signature)
       if (sign(body) !== signature) {
         res.end('Not Allowed')
         return
@@ -29,7 +30,7 @@ const server = http.createServer((req, res) => {
       // 通知 github 成功接收
       res.setHeader('Content-Type', 'application/json')
       res.end(JSON.stringify({ ok: true }))
-      console.log(' 开启子进程 执行 .sh 脚本 -->  body', body)
+      console.log(' 开启子进程 执行 .sh 脚本 ')
       // 开启子进程 执行 .sh 脚本 开始 cicd 
       if (event === 'push') {
         let payload = {}
