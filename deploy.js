@@ -8,15 +8,15 @@ function deploy(payload) {
   const { name: deployName, email } = pusher
   console.log('payload -->> ', payload)
   console.log('sh path --> ', `./${projectName}.sh`)
-  
+
   const child = spawn('sh', [`./${projectName}.sh`])
 
   // 输出日志
   const buffer = []
-  child.stdio.on('data', (fragment) => {
+  child.stdout.on('data', (fragment) => {
     buffer.push(fragment)
   })
-  child.stdio.on('end', (fragment) => {
+  child.stdout.on('end', (fragment) => {
     const logs = buffer.concat(fragment).toString()
     console.log('logs -->', logs)
 
