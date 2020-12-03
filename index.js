@@ -1,7 +1,7 @@
 const http = require('http')
 const crypto = require('crypto')
 const { spawn } = require('child_process')
-const sendMail = require('./sendMail')
+// const sendMail = require('./sendMail')
 const port = 4000;
 const secretKey = 'aliyun';
 
@@ -9,7 +9,7 @@ const server = http.createServer((req, res) => {
   const { url, method, headers } = req;
   const event = headers['x-github-event']
   const signature = headers['x-hub-signature']
-  
+
   if (method === 'POST' && url === '/webhook') {
     let body; // 请求体
     const buffer = [];
@@ -41,6 +41,7 @@ const server = http.createServer((req, res) => {
           return console.log('JSON.parse err', err)
         }
         console.log('sh path --> ', `./${payload.repository.name}.sh`)
+        return
         const child = spawn('sh', [`./${payload.repository.name}.sh`])
 
         // 输出日志
