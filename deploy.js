@@ -8,7 +8,7 @@ function deploy(payload) {
   const { name: deployName, email } = pusher
   console.log('payload -->> ', payload)
   console.log('sh path --> ', `./${projectName}.sh`)
-  return
+  
   const child = spawn('sh', [`./${projectName}.sh`])
 
   // 输出日志
