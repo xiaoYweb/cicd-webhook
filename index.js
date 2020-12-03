@@ -17,7 +17,7 @@ const server = http.createServer((req, res) => {
     })
     
     req.on('end', (fragment) => {
-      body = buffer.concat(fragment)
+      body = buffer.concat(fragment).toString()
       console.log('isSame key', sign(body) !== signature)
       if (sign(body) !== signature) {
         res.end('Not Allowed')
@@ -27,7 +27,7 @@ const server = http.createServer((req, res) => {
     // 通知 github 成功接收
     res.setHeader('Content-Type', 'application/json')
     res.end(JSON.stringify({ ok: true }))
-
+    console.log(' 开启子进程 执行 .sh 脚本 -->  body', body)
     // 开启子进程 执行 .sh 脚本 开始 cicd 
     if (event === 'push') {
       let payload = {}
