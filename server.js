@@ -11,25 +11,27 @@ app.use(koaBody());
 app.use(async ctx => {
   const { path, request, headers, method } = ctx;
   const { body } = request;
-  console.log('path, body', path, body)
+  console.log('path, body', path, typeof body, body)
   console.log('method', method)
   console.log('headers', headers)
 
+  if (method !== 'POST' || path !== '/webhook') {
+     ctx.body = 'Not Found';
+     return
+  }
   const event = headers['x-github-event']
   const signature = headers['x-hub-signature']
 
-  console.log('isSame key', sign(body) === signature)
+  const selfSignature = sign(JSON.stringify(body))
+  console.log('isSame key', selfSignature === signature)
 
-  if (body && sign(body) !== signature) {
-    res.end('Not Allowed')
+  if (selfSignature !== signature) {
+    ctx.body = 'Not Allowed';
     return
   }
-  if (method === 'POST' && path === '/webhook') {
-    ctx.body = { ok: true }
-    event === 'push' && deploy(body)
-    return
-  }
-  ctx.body = 'Not Found';
+  ctx.body = { ok: true }
+
+  event === 'push' && deploy(body)
 });
 
 app.listen(port, () => {
