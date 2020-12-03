@@ -9,13 +9,15 @@ const server = http.createServer((req, res) => {
   const { url, method, headers } = req;
   const event = headers['x-github-event']
   const signature = headers['x-hub-signature']
+  let body; // 请求体
   if (method === 'POST' && url === '/webhook') {
     const buffer = [];
     req.on('data', (fragment) => {
       buffer.push(fragment)
     })
+    
     req.on('end', (fragment) => {
-      const body = buffer.concat(fragment)
+      body = buffer.concat(fragment)
       console.log('isSame key', sign(body) !== signature)
       if (sign(body) !== signature) {
         res.end('Not Allowed')
