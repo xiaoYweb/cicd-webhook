@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer')
 
 const transporter = nodemailer.createTransport({
   server: 'qq',
-  port: 465 // SMPT 端口
+  port: 465, // SMPT 端口
   secureConnection: true,
   auth: {
     user: '943160935@qq.com',
