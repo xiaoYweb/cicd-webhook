@@ -21,5 +21,5 @@ echo "创建新 docker 镜像"
 docker build -t cicd-front:1.0 .
 # docker build -f ./Dockerfile -t cicd-front:1.0 .
 echo "创建 并 启动 新容器"
-# 错误命令 docker run -port 5000:5000 --name cicd-front-container -d cicd-front:1.0 
-docker run -d --name cicd-front-container -p 80:80 cicd-front:1.0
+# 错误命令 docker run -port 80:80 --name cicd-front-container -d cicd-front:1.0 
+docker run -d --name cicd-front-container -p 8000:80 cicd-front:1.0
