@@ -16,8 +16,8 @@ app.use(async ctx => {
   console.log('headers', headers)
 
   if (method !== 'POST' || path !== '/webhook') {
-     ctx.body = 'Not Found';
-     return
+    ctx.body = 'Not Found';
+    return
   }
   const event = headers['x-github-event']
   const signature = headers['x-hub-signature']
@@ -25,13 +25,15 @@ app.use(async ctx => {
   const selfSignature = sign(JSON.stringify(body))
   console.log('isSame key', selfSignature === signature)
 
-  if (selfSignature !== signature) {
-    ctx.body = 'Not Allowed';
-    return
-  }
+  // if (selfSignature !== signature) {
+  //   ctx.body = 'Not Allowed';
+  //   return
+  // }
   ctx.body = { ok: true }
 
-  event === 'push' && deploy(body)
+  const paylaod = selfParse(body.payload)
+
+  event === 'push' && deploy(paylaod)
 });
 
 app.listen(port, () => {
@@ -40,4 +42,15 @@ app.listen(port, () => {
 
 function sign(data) {
   return `sha1${crypto.createHmac('sha1', secretKey).update(data).digest('hex')}`;
+}
+
+function selfParse(params) {
+  if (!params) return '';
+  try {
+    const res = JSON.parse(params)
+    return res;
+  } catch (err) {
+    console.log('JSON.parse err -> ', err)
+  }
+  return params;
 }
