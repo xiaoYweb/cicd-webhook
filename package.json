@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ndoe ./index.js"
+    "start": "pm2 start ./index.js --name cicd-webhook --watch",
+    "del": "pm2 delete cicd-webhook",
+    "dev": "node ./index.js"
   },
   "keywords": [],
   "author": "",
