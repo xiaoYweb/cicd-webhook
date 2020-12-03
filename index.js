@@ -30,7 +30,12 @@ const server = http.createServer((req, res) => {
 
     // 开启子进程 执行 .sh 脚本 开始 cicd 
     if (event === 'push') {
-      const payload = JSON.parse(body);
+      let payload = {}
+      try {
+        payload = JSON.parse(body);
+      } catch (err) {
+        return console.log('JSON.parse err', err)
+      }
       console.log('sh path --> ', `./${payload.repository.name}.sh`)
       const child = spawn('sh', [`./${payload.repository.name}.sh`])
 
