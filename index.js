@@ -20,12 +20,12 @@ const server = http.createServer((req, res) => {
 
     req.on('end', (fragment) => {
       body = buffer.concat(fragment).toString()
-      console.log('body', body, signature)
+      console.log('body', body)
       console.log('isSame key', sign(body) === signature)
-      if (sign(body) !== signature) {
-        res.end('Not Allowed')
-        return
-      }
+      // if (sign(body) !== signature) {
+      //   res.end('Not Allowed')
+      //   return
+      // }
 
       // 通知 github 成功接收
       res.setHeader('Content-Type', 'application/json')
@@ -36,6 +36,7 @@ const server = http.createServer((req, res) => {
         let payload = {}
         try {
           payload = JSON.parse(body);
+          console.log('JSON.parse payload', payload)
         } catch (err) {
           return console.log('JSON.parse err', err)
         }
